@@ -1,36 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
-import * as bcrypt from 'bcrypt';
-import { User } from 'src/user/entities/user.entity';
-import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UnauthorizedError } from './errors/unauthorized.error';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { UserPayload } from './models/UserPayload';
 import { UserToken } from './models/UserToken';
+
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
   ) {}
 
-  login(user: User): UserToken {
+  async login(user: User): Promise<UserToken> {
     const payload: UserPayload = {
       sub: user.id,
       email: user.email,
       name: user.name,
     };
 
-    const jwtToken = this.jwtService.sign(payload);
-
     return {
-      access_token: jwtToken,
+      access_token: this.jwtService.sign(payload),
     };
   }
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userService.findByEmail(email);
 
     if (user) {
-      const isPasswordValid = bcrypt.compareSync(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (isPasswordValid) {
         return {
@@ -38,7 +38,10 @@ export class AuthService {
           password: undefined,
         };
       }
-      throw new Error('Email ou senha inválidos');
     }
+
+    throw new UnauthorizedError(
+      'Email address or password provided is incorrect.',
+    );
   }
 }

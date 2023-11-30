@@ -34,6 +34,6 @@ model Message {
   userId     Int
   chatRoomId Int
   createdAt  DateTime @default(now())
-  user       User     @relation("MessageToUser", fields: [userId], references: [id])
+  users      User     @relation("MessageToUser", fields: [userId], references: [id])
   chatRoom   ChatRoom @relation("MessageToChatRoom", fields: [chatRoomId], references: [id])
 }

@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
 const {email, setEmail, password, setPassword} = useContext(AuthContext);
-const [isLogged, setIsLogged] = useState(false);
 const [failedLogin, setFailedLogin] = useState(false);
 
 const handleLogin = async () => {
@@ -17,7 +16,6 @@ const handleLogin = async () => {
     const { access_token } = await requestLogin('/login', { email, password });
     setToken(access_token);
     localStorage.setItem('token', access_token);
-    setIsLogged(true);
     router.push('/chat');
   } catch (error) {
     console.log(error.response.data);

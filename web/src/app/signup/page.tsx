@@ -10,6 +10,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [failedeCreateUser, setFailedeCreateUser] = useState(false);
 
   const handleSubmit = async () => {
     if(password !== confirmPassword) return alert('Passwords do not match');
@@ -19,9 +20,8 @@ export default function SignUp() {
         alert('Sign up successful, enter your credentials to login');
         route.push('/');
       }
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) return alert(error.response.data.message);
     }
   };
 

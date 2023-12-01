@@ -23,4 +23,12 @@ export class UserService {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     return user;
   }
+
+  public async findById(id: number) {
+    const user = await this.prisma.user.findUnique({ where: { id: id } });
+    return {
+      ...user,
+      password: undefined,
+    };
+  }
 }

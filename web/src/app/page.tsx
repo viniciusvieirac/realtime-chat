@@ -1,7 +1,33 @@
+'use client';
 import Image from "next/image";
 import { Button, TextField } from "@mui/material";
+import { useContext, useState } from "react";
+import AuthContext from "@/context/auth/AuthContext";
+import { requestLogin, setToken } from "./auth/Auth";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+const {email, setEmail, password, setPassword} = useContext(AuthContext);
+const [isLogged, setIsLogged] = useState(false);
+const [failedLogin, setFailedLogin] = useState(false);
+
+const handleLogin = async () => {
+  try {
+    const { access_token } = await requestLogin('/login', { email, password });
+    console.log('clicou')
+    console.log(access_token);
+    setToken(access_token);
+    console.log('Token recebido:', access_token);
+    localStorage.setItem('token', access_token);
+    setIsLogged(true);
+    router.push('/chat');
+  } catch (error) {
+    setFailedLogin(true);
+    // console.error('Erro no login:', error);
+  }
+};
+    
   return (
     <main className="flex flex-col lg:flex-row items-center justify-center h-screen">
       <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -26,13 +52,18 @@ export default function Home() {
             <p className="text-gray-600 mt-4">Sign in to continue</p>
           </div>
           <div>
-            <form className="flex flex-col items-center mt-20">
+            <form className="flex flex-col items-center mt-20"  onSubmit={(e) => {
+  e.preventDefault(); // Evita o comportamento padrão de submit de formulários
+  handleLogin(); // Chama a função handleLogin quando o formulário for submetido
+}}>
               <TextField
                 className="mb-8 w-60"
                 id="standard-basic"
                 type="email"
                 label="Email"
                 variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 className="mb-8 w-60"
@@ -40,8 +71,10 @@ export default function Home() {
                 id="standard-basic"
                 label="Password"
                 variant="standard"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <Button variant="outlined">Entrar</Button>
+              <Button variant="outlined" type="submit">Entrar</Button>
             </form>
           </div>
         </div>

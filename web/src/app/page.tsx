@@ -15,16 +15,13 @@ const [failedLogin, setFailedLogin] = useState(false);
 const handleLogin = async () => {
   try {
     const { access_token } = await requestLogin('/login', { email, password });
-    console.log('clicou')
-    console.log(access_token);
     setToken(access_token);
-    console.log('Token recebido:', access_token);
     localStorage.setItem('token', access_token);
     setIsLogged(true);
     router.push('/chat');
   } catch (error) {
+    console.log(error.response.data);
     setFailedLogin(true);
-    // console.error('Erro no login:', error);
   }
 };
     
@@ -53,8 +50,8 @@ const handleLogin = async () => {
           </div>
           <div>
             <form className="flex flex-col items-center mt-20"  onSubmit={(e) => {
-  e.preventDefault(); // Evita o comportamento padrão de submit de formulários
-  handleLogin(); // Chama a função handleLogin quando o formulário for submetido
+  e.preventDefault(); 
+  handleLogin(); 
 }}>
               <TextField
                 className="mb-8 w-60"
@@ -77,10 +74,13 @@ const handleLogin = async () => {
               <Button variant="outlined" type="submit">Entrar</Button>
             </form>
           </div>
+          {failedLogin && (<>
+            <span className="text-red-500 mt-4">Email or password incorrect</span>
+          </>)}
         </div>
         <span className="mb-10 text- text-gray-500">
           Dont have an account?{" "}
-          <a href="#" className="text-blue-500">
+          <a href="/signup" className="text-blue-500">
             Sign Up
           </a>
         </span>

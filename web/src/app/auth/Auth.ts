@@ -23,5 +23,15 @@ export const requestLogin = async (endpoint: string, body: any) => {
   }
 };
 
+export const requestRegister = async (endpoint: string, body: any) => {
+  try {
+    const { data } = await api.post(endpoint, body);
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 export default api;

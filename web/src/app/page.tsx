@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import AuthContext from "@/context/auth/AuthContext";
 import { requestLogin, setToken } from "./auth/Auth";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export default function Home() {
   const router = useRouter();
@@ -12,12 +13,13 @@ const {email, setEmail, password, setPassword} = useContext(AuthContext);
 const [failedLogin, setFailedLogin] = useState(false);
 
 const handleLogin = async () => {
+  if(!email || !password) return alert('Please fill all fields');
   try {
     const { access_token } = await requestLogin('/login', { email, password });
     setToken(access_token);
     localStorage.setItem('token', access_token);
     router.push('/chat');
-  } catch (error) {
+  } catch (error: any) {
     console.log(error.response.data);
     setFailedLogin(true);
   }

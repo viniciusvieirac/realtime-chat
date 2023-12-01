@@ -14,13 +14,14 @@ export default function SignUp() {
 
   const handleSubmit = async () => {
     if(password !== confirmPassword) return alert('Passwords do not match');
+    if(!name || !email || !password || !confirmPassword) return alert('Please fill all fields');
     try {
       const data = await requestRegister('/signup', {name, email, password});
       if(data){
         alert('Sign up successful, enter your credentials to login');
         route.push('/');
       }
-    } catch (error) {
+    } catch (error: any) {
       if(error.response.data.message) return alert(error.response.data.message);
     }
   };

@@ -2,8 +2,10 @@ import {
   WebSocketGateway,
   SubscribeMessage,
   MessageBody,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
+import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from './dto/create-message.dto';
 
 @WebSocketGateway({
@@ -12,20 +14,24 @@ import { CreateMessageDto } from './dto/create-message.dto';
   },
 })
 export class MessagesGateway {
+  @WebSocketServer()
+  server: Server;
   constructor(private readonly messagesService: MessagesService) {}
 
   @SubscribeMessage('createMessage')
   create(@MessageBody() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
+    const message = this.messagesService.create(createMessageDto);
+    this.server.emit('newMessage', message);
+    return message;
   }
 
   @SubscribeMessage('findAllMessages')
-  findAll() {
-    return this.messagesService.findAll();
-  }
-
-  @SubscribeMessage('removeMessage')
-  remove(@MessageBody() id: number) {
-    return this.messagesService.remove(id);
+  findAll(
+    client: Socket,
+    payload: { id: number; messageType: 'sent' | 'received' },
+  ) {
+    const { id, messageType } = payload;
+    const messages = this.messagesService.findAllMessages(id, messageType);
+    return messages;
   }
 }

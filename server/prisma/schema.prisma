@@ -11,29 +11,21 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  email    String     @unique
-  name     String
-  password String
-  chatRoom ChatRoom[] @relation("ChatRoomToUser")
-  messages Message[]  @relation("MessageToUser")
-}
-
-model ChatRoom {
-  id        Int       @id @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now())
-  users     User[]    @relation("ChatRoomToUser")
-  messages  Message[] @relation("MessageToChatRoom")
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  name             String
+  password         String
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
-  content    String
-  imageUrl   String?
-  userId     Int
-  chatRoomId Int
-  createdAt  DateTime @default(now())
-  users      User     @relation("MessageToUser", fields: [userId], references: [id])
-  chatRoom   ChatRoom @relation("MessageToChatRoom", fields: [chatRoomId], references: [id])
+  id          Int      @id @default(autoincrement())
+  content     String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  senderId    Int
+  recipientId Int
 }

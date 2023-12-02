@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
@@ -13,23 +21,28 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findById(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
+  @Get()
+  findByEmail(@Body('email') email: string) {
+    return this.userService.findByEmail(email);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @IsPublic()
+  @Get('user/data')
+  async findByToken(@Headers('authorization') authHeader: string) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException(
+        'Invalid or missing authorization header',
+      );
+    }
+    const token = authHeader.split(' ')[1];
+
+    const userProfile = await this.userService.getUserProfileByToken(token);
+
+    return userProfile;
+  }
 }

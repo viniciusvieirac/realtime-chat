@@ -1,13 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
+interface JwtPayload {
+  sub: string;
+}
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   public async create(createUserDto: CreateUserDto) {
+    const user = await this.findByEmail(createUserDto.email);
+    if (user) {
+      throw new ConflictException('User already exists');
+    }
+    if (
+      !createUserDto.name ||
+      !createUserDto.email ||
+      !createUserDto.password
+    ) {
+      throw new ConflictException('Name, Email and Password are required');
+    }
     const data = {
       ...createUserDto,
       password: bcrypt.hashSync(createUserDto.password, 10),
@@ -30,5 +49,26 @@ export class UserService {
       ...user,
       password: undefined,
     };
+  }
+
+  async getUserProfileByToken(token: string) {
+    try {
+      const decodedToken = jwt.verify(
+        token,
+        process.env.JWT_SECRET,
+      ) as JwtPayload;
+      console.log(decodedToken);
+      const user = await this.findById(Number(decodedToken.sub));
+      const userProfile = {
+        ...user,
+        name: user.name,
+        email: user.email,
+      };
+
+      return userProfile;
+    } catch (error) {
+      console.log(error.message);
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

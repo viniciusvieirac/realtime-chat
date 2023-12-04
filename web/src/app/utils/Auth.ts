@@ -33,5 +33,36 @@ export const requestRegister = async (endpoint: string, body: any) => {
   }
 }
 
+export const getUserByToken = async (endpoint: string, authToken: string) => {
+  try {
+    console.log(authToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    };
+    const { data } = await api.get(endpoint, config);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getUserByName = async (endpoint: string, authToken: string, username: string) => {
+  try {
+    console.log(authToken);
+    const config = {
+      headers: {
+        username: username,
+        Authorization: `Bearer ${authToken}`
+      }
+    };
+    const { data } = await api.get(endpoint, config);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 export default api;

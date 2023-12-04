@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { requestRegister } from '../auth/Auth';
+import { requestRegister } from '../utils/Auth';
 import { useRouter } from "next/navigation";
 
 

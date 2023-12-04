@@ -1,30 +1,34 @@
-'use client';
+"use client";
 import Image from "next/image";
 import { Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import AuthContext from "@/context/auth/AuthContext";
-import { requestLogin, setToken } from "./auth/Auth";
+import { requestLogin, setToken } from "./utils/Auth";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
 
 export default function Home() {
   const router = useRouter();
-const {email, setEmail, password, setPassword} = useContext(AuthContext);
-const [failedLogin, setFailedLogin] = useState(false);
+  const { email, setEmail, password, setPassword } = useContext(AuthContext);
+  const [failedLogin, setFailedLogin] = useState(false);
 
-const handleLogin = async () => {
-  if(!email || !password) return alert('Please fill all fields');
-  try {
-    const { access_token } = await requestLogin('/login', { email, password });
-    setToken(access_token);
-    localStorage.setItem('token', access_token);
-    router.push('/chat');
-  } catch (error: any) {
-    console.log(error.response.data);
-    setFailedLogin(true);
-  }
-};
-    
+  const handleLogin = async () => {
+    if (!email || !password) return alert("Please fill all fields");
+    try {
+      const { access_token } = await requestLogin("/login", {
+        email,
+        password,
+      });
+      setToken(access_token);
+      localStorage.setItem("token", access_token);
+      localStorage.setItem("email", email);
+      router.push("/chat");
+    } catch (error: any) {
+      console.log(error.response.data);
+      setPassword("");
+      setFailedLogin(true);
+    }
+  };
+
   return (
     <main className="flex flex-col lg:flex-row items-center justify-center h-screen">
       <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -49,10 +53,13 @@ const handleLogin = async () => {
             <p className="text-gray-600 mt-4">Sign in to continue</p>
           </div>
           <div>
-            <form className="flex flex-col items-center mt-20"  onSubmit={(e) => {
-  e.preventDefault(); 
-  handleLogin(); 
-}}>
+            <form
+              className="flex flex-col items-center mt-20"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin();
+              }}
+            >
               <TextField
                 className="mb-8 w-60"
                 id="standard-basic"
@@ -71,12 +78,18 @@ const handleLogin = async () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button variant="outlined" type="submit">Entrar</Button>
+              <Button variant="outlined" type="submit">
+                Entrar
+              </Button>
             </form>
           </div>
-          {failedLogin && (<>
-            <span className="text-red-500 mt-4">Email or password incorrect</span>
-          </>)}
+          {failedLogin && (
+            <>
+              <span className="text-red-500 mt-4">
+                Email or password incorrect
+              </span>
+            </>
+          )}
         </div>
         <span className="mb-10 text- text-gray-500">
           Dont have an account?{" "}

@@ -5,13 +5,10 @@ import { useEffect, useState } from "react";
 import { getUserByToken } from "../utils/Auth";
 import { Button, TextField } from "@mui/material";
 import io from "socket.io-client";
+import { UserData } from "@/interfaces/userInterface";
+import { IMsgData, IMsgDataTypes } from "@/interfaces/MessagesInterface";
 
 const socket = io("http://localhost:3000");
-
-interface UserData {
-  name: string;
-  email: string;
-}
 
 export default function Chat() {
   const [user, setUser] = useState<UserData | null>(null);
@@ -20,7 +17,6 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState<IMsgData | null>(null);
 
   useEffect(() => {
-    console.log("useEffect triggered");
     socket.emit("findAllMessages");
     socket.on("allMessages", (data: IMsgData[]) => {
       setChat(data);
@@ -80,11 +76,11 @@ export default function Chat() {
   }, []);
 
   function formatarHorarioISO8601(createdAt: string | undefined) {
-    if (!createdAt) return ""; // Tratar valores undefined
+    if (!createdAt) return "";
 
     const dateObject = new Date(createdAt);
     if (isNaN(dateObject.getTime())) {
-      return ""; // Tratar valores de data inválidos
+      return "";
     }
 
     const horas = dateObject.getHours();

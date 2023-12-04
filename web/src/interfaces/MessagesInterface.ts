@@ -1,15 +1,13 @@
-interface IMsgDataTypes {
+export interface IMsgDataTypes {
   content: string;
   imageUrl?: string;
   createdAt?: String;
   email?: string;
 }
-
-interface Sender {
+export interface Sender {
   name: string;
 }
-
-interface IMsgData {
+export interface IMsgData {
   content: string;
   createdAt?: string;
   imageUrl?: string;

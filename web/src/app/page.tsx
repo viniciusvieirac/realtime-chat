@@ -23,7 +23,6 @@ export default function Home() {
       localStorage.setItem("email", email);
       router.push("/chat");
     } catch (error: any) {
-      console.log(error.response.data);
       setPassword("");
       setFailedLogin(true);
     }

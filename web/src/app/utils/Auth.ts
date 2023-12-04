@@ -16,7 +16,6 @@ export const requestData = async (endpoint: string) => {
 export const requestLogin = async (endpoint: string, body: any) => {
   try {
     const { data } = await api.post(endpoint, body);
-    console.log(data);
     return data;
   } catch (error) {
     throw error;
@@ -26,7 +25,6 @@ export const requestLogin = async (endpoint: string, body: any) => {
 export const requestRegister = async (endpoint: string, body: any) => {
   try {
     const { data } = await api.post(endpoint, body);
-    console.log(data);
     return data;
   } catch (error) {
     throw error;
@@ -35,7 +33,6 @@ export const requestRegister = async (endpoint: string, body: any) => {
 
 export const getUserByToken = async (endpoint: string, authToken: string) => {
   try {
-    console.log(authToken);
     const config = {
       headers: {
         Authorization: `Bearer ${authToken}`
@@ -50,7 +47,6 @@ export const getUserByToken = async (endpoint: string, authToken: string) => {
 
 export const getUserByName = async (endpoint: string, authToken: string, username: string) => {
   try {
-    console.log(authToken);
     const config = {
       headers: {
         username: username,

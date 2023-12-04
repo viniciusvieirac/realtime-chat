@@ -5,7 +5,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { CreateMessageDto } from './dto/create-message.dto';
 
 @WebSocketGateway({
@@ -26,12 +26,8 @@ export class MessagesGateway {
   }
 
   @SubscribeMessage('findAllMessages')
-  findAll(
-    client: Socket,
-    payload: { id: number; messageType: 'sent' | 'received' },
-  ) {
-    const { id, messageType } = payload;
-    const messages = this.messagesService.findAllMessages(id, messageType);
+  findAll() {
+    const messages = this.messagesService.findAllMessages();
     return messages;
   }
 }

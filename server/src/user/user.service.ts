@@ -57,17 +57,13 @@ export class UserService {
         token,
         process.env.JWT_SECRET,
       ) as JwtPayload;
-      console.log(decodedToken);
       const user = await this.findById(Number(decodedToken.sub));
       const userProfile = {
         ...user,
-        name: user.name,
-        email: user.email,
       };
 
       return userProfile;
     } catch (error) {
-      console.log(error.message);
       throw new UnauthorizedException('Invalid token');
     }
   }

@@ -1,3 +1,4 @@
+import { UpdateUser } from '@/interfaces/userInterface';
 import axios from 'axios';
 import { get } from 'http';
 
@@ -65,11 +66,15 @@ export const updateUser = async (authToken: string, body: any) => {
   try {
     const userData = await getUserByToken('/user/data', authToken);
     const userId = userData.id;
-    const updatedUser = {
-      ...userData,
-      description: body.description,
-      imageUrl: body.imageUrl,
-    };
+    const updatedUser: UpdateUser = {};
+
+    if (body.description !== undefined) {
+      updatedUser['description'] = body.description;
+    }
+
+    if (body.imageUrl !== undefined) {
+      updatedUser['imageUrl'] = body.imageUrl;
+    }
 
     const config = {
       headers: {
@@ -77,12 +82,12 @@ export const updateUser = async (authToken: string, body: any) => {
       }
     };
 
-    const { data } = await api.put(`/${userId}`, updatedUser, config); // Correção aqui: usando updatedUser em vez de body
+    const { data } = await api.put(`/${userId}`, updatedUser, config);
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 
 export default api;

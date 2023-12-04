@@ -1,13 +1,14 @@
 'use client';
 import { updateUser } from '@/app/utils/AxiosFunctions';
-import AuthContext from '@/context/auth/AuthContext';
 import { TextField } from '@mui/material';
 import Image from 'next/image';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { useRouter } from "next/navigation";
+
 
 export default function EditProfile() {
+  const router = useRouter();
   const [description, setDescription] = useState('');
-  const {} = useContext(AuthContext);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -23,10 +24,10 @@ export default function EditProfile() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if(token){
-      console.log(selectedImage);
-      const updatedProfile = await updateUser(token, { description, image: selectedImage?.toString() });
-      console.log(updatedProfile);
+       await updateUser(token, { description, imageUrl: selectedImage?.toString() });
     }
+    alert('Perfil atualizado com sucesso!');
+    router.push('/profile');
   };
 
   return (
@@ -62,7 +63,6 @@ export default function EditProfile() {
             className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             onChange={handleImageChange}
             accept="image/*"
-            required
           />
         </div>
         <button

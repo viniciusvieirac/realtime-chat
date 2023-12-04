@@ -11,3 +11,8 @@ export interface UserData {
   avatarUrl?: string;
   description?: string;
 }
+
+export interface UpdateUser {
+  description?: string;
+  imageUrl?: string;
+}

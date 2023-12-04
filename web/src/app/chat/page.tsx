@@ -20,18 +20,46 @@ interface IMsgDataTypes {
   email?: string;
 }
 
+interface Sender {
+  name: string;
+}
+
 interface IMsgData {
   content: string;
-  createdAt?: String;
+  createdAt?: string;
   imageUrl?: string;
   id?: number;
-  senderId?: number;
+  sender: Sender;
 }
 
 export default function Chat() {
   const [user, setUser] = useState<UserData | null>(null);
   const [chat, setChat] = useState<IMsgData[]>([]);
   const [text, setText] = useState("");
+  const [newMessage, setNewMessage] = useState<IMsgData | null>(null);
+
+  useEffect(() => {
+    console.log("useEffect triggered");
+    socket.emit("findAllMessages");
+    socket.on("allMessages", (data: IMsgData[]) => {
+      setChat(data);
+    });
+
+    socket.on("message", (message: IMsgData) => {
+      setNewMessage(message);
+    });
+
+    return () => {
+      socket.off("allMessages");
+      socket.off("message");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (newMessage) {
+      setChat([...chat, newMessage]); // Adiciona a nova mensagem à lista existente
+    }
+  }, [newMessage]);
 
   const sendData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,7 +69,20 @@ export default function Chat() {
         content: text,
         email: email as string,
       };
+
       socket.emit("createMessage", msgData);
+
+      setChat([
+        ...chat,
+        {
+          content: text,
+          createdAt: new Date().toISOString(),
+          sender: {
+            name: user?.name || "Anonymous",
+          },
+        },
+      ]);
+
       setText("");
     }
   };
@@ -51,48 +92,28 @@ export default function Chat() {
     const getUser = async () => {
       if (token) {
         const data = await getUserByToken("/user/data", token);
-        if (data && typeof data === "object" && !Array.isArray(data)) {
-          setUser(data as UserData);
-        } else {
-          console.log("Data received is not in the expected format:", data);
-        }
-      } else {
-        console.log("Token not found");
+        setUser(data as UserData);
       }
     };
     getUser();
   }, []);
 
-  useEffect(() => {
-    socket.emit("findAllMessages");
+  function formatarHorarioISO8601(createdAt: string | undefined) {
+    if (!createdAt) return ""; // Tratar valores undefined
 
-    socket.on("allMessages", (data: IMsgData[]) => {
-      setChat(data);
-    });
-
-    return () => {
-      socket.off("allMessages");
-    };
-  }, [chat]);
-
-  useEffect(() => {
-    socket.on("newMessage", (data: IMsgData) => {
-      setChat(prevChat => [...prevChat, data]);
-    });
-
-    return () => {
-      socket.off("newMessage");
-    };
-  }, []);
-
-  function formatarHorarioISO8601(createdAt: string) {
     const dateObject = new Date(createdAt);
+    if (isNaN(dateObject.getTime())) {
+      return ""; // Tratar valores de data inválidos
+    }
+
     const horas = dateObject.getHours();
     const minutos = dateObject.getMinutes();
-    const horarioFormatado = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+    const horarioFormatado = `${horas.toString().padStart(2, "0")}:${minutos
+      .toString()
+      .padStart(2, "0")}`;
     return horarioFormatado;
   }
-  
+
   return (
     <ProtectedRoute>
       <div>
@@ -106,8 +127,11 @@ export default function Chat() {
         <div>
           {chat.map((msg) => (
             <div key={msg.id}>
-              <p>{msg.content}</p>
-              <p>{formatarHorarioISO8601(msg.createdAt as string)}</p>
+              <p>
+                {msg.sender && <strong>{msg.sender.name}:</strong>}{" "}
+                {msg.content}
+              </p>
+              {msg.createdAt && <p>{formatarHorarioISO8601(msg.createdAt)}</p>}
             </div>
           ))}
         </div>

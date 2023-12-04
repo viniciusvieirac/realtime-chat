@@ -5,6 +5,7 @@ import {
   Headers,
   Param,
   Post,
+  Put,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -44,5 +45,11 @@ export class UserController {
     const userProfile = await this.userService.getUserProfileByToken(token);
 
     return userProfile;
+  }
+
+  @IsPublic()
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
+    return this.userService.update(+id, updateUserDto);
   }
 }

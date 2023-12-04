@@ -67,4 +67,18 @@ export class UserService {
       throw new UnauthorizedException('Invalid token');
     }
   }
+
+  async update(id: number, updateUserDto: CreateUserDto) {
+    const user = await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        ...updateUserDto,
+        password: bcrypt.hashSync(updateUserDto.password, 10),
+      },
+    });
+    return {
+      ...user,
+      password: undefined,
+    };
+  }
 }

@@ -12,4 +12,10 @@ export class CreateUserDto extends User {
 
   @IsString()
   name: string;
+
+  @IsString()
+  imageUrl?: string;
+
+  @IsString()
+  description?: string;
 }

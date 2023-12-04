@@ -69,7 +69,8 @@ export default function Chat() {
   useEffect(() => {
     getUser();
   }, []);
-
+  
+  console.log(user);
   return (
     <ProtectedRoute>
       <div>
@@ -77,9 +78,9 @@ export default function Chat() {
         {user && (
           <div>
             <Link href="/profile">
-            {user.avatarUrl && (
+            {user.imageUrl && (
               <Image
-                src={user.avatarUrl}
+                src={user.imageUrl}
                 alt="avatar"
                 width={100}
                 height={100}

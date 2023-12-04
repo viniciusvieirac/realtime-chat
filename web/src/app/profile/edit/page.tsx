@@ -2,13 +2,15 @@
 import { updateUser } from '@/app/utils/AxiosFunctions';
 import { TextField } from '@mui/material';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { useRouter } from "next/navigation";
+import AuthContext from '@/context/auth/AuthContext';
 
 
 export default function EditProfile() {
   const router = useRouter();
   const [description, setDescription] = useState('');
+  const { user, setUser } = useContext(AuthContext);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +26,15 @@ export default function EditProfile() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if(token){
-       await updateUser(token, { description, imageUrl: selectedImage?.toString() });
+      await updateUser(token, { description, imageUrl: selectedImage?.toString() });
+      setUser({
+        ...user,
+        description,
+        imageUrl: selectedImage?.toString(),
+      });
+      alert('Perfil atualizado com sucesso!');
+      router.push('/profile');
     }
-    alert('Perfil atualizado com sucesso!');
-    router.push('/profile');
   };
 
   return (

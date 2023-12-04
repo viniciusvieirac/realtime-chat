@@ -24,6 +24,12 @@ export default function Profile() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md bg-white text-slate-900 rounded-lg shadow-lg p-6">
+        <Button
+         variant="contained"
+         color="primary"
+         className="w-full mb-4 bg-black">
+          <a href="/chat">Voltar</a>
+        </Button>
         <div className="mb-4 text-center">
           {user.imageUrl && (
             <Image

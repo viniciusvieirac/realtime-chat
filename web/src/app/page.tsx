@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import AuthContext from "@/context/auth/AuthContext";
-import { requestLogin, setToken } from "./utils/Auth";
+import { requestLogin, setToken } from "./utils/AxiosFunctions";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
   const [failedLogin, setFailedLogin] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) return alert("Please fill all fields");
+    if (!email || !password) return alert("Preencha todos os campos");
     try {
       const { access_token } = await requestLogin("/login", {
         email,

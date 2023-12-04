@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { get } from 'http';
 
 const api = axios.create({
     baseURL: 'http://localhost:3000'
@@ -54,6 +55,29 @@ export const getUserByName = async (endpoint: string, authToken: string, usernam
       }
     };
     const { data } = await api.get(endpoint, config);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateUser = async (authToken: string, body: any) => {
+  try {
+    const userData = await getUserByToken('/user/data', authToken);
+    const userId = userData.id;
+    const updatedUser = {
+      ...userData,
+      description: body.description,
+      imageUrl: body.imageUrl,
+    };
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    };
+
+    const { data } = await api.put(`/${userId}`, updatedUser, config); // Correção aqui: usando updatedUser em vez de body
     return data;
   } catch (error) {
     throw error;

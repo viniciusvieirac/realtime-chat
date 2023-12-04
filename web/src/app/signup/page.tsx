@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { requestRegister } from '../utils/Auth';
+import { requestRegister } from '../utils/AxiosFunctions';
 import { useRouter } from "next/navigation";
 
 
@@ -10,7 +10,6 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [failedeCreateUser, setFailedeCreateUser] = useState(false);
 
   const handleSubmit = async () => {
     if(password !== confirmPassword) return alert('Passwords do not match');

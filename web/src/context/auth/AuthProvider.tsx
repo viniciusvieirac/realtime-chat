@@ -13,6 +13,7 @@ interface AuthContextValues {
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState({} as AuthContextValues);
 
   const values: AuthContextValues = useMemo(
     () => ({
@@ -20,8 +21,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       setEmail,
       password,
       setPassword,
+      user,
+      setUser,
     }),
-    [email, setEmail, password, setPassword]
+    [email, setEmail, password, setPassword, user, setUser]
   );
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

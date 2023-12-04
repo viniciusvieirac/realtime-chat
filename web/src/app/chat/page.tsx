@@ -1,17 +1,21 @@
 "use client";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { useEffect, useState } from "react";
-import { getUserByToken } from "../utils/Auth";
+import { useContext, useEffect, useState } from "react";
+import { getUserByToken } from "../utils/AxiosFunctions";
 import { Button, TextField } from "@mui/material";
 import io from "socket.io-client";
 import { UserData } from "@/interfaces/userInterface";
 import { IMsgData, IMsgDataTypes } from "@/interfaces/MessagesInterface";
+import { formatarHorarioISO8601 } from "../utils/formattedHours";
+import Image from "next/image";
+import Link from "next/link";
+import AuthContext from "@/context/auth/AuthContext";
 
 const socket = io("http://localhost:3000");
 
 export default function Chat() {
-  const [user, setUser] = useState<UserData | null>(null);
+  const {user, setUser} = useContext(AuthContext);
   const [chat, setChat] = useState<IMsgData[]>([]);
   const [text, setText] = useState("");
   const [newMessage, setNewMessage] = useState<IMsgData | null>(null);
@@ -75,32 +79,28 @@ export default function Chat() {
     getUser();
   }, []);
 
-  function formatarHorarioISO8601(createdAt: string | undefined) {
-    if (!createdAt) return "";
-
-    const dateObject = new Date(createdAt);
-    if (isNaN(dateObject.getTime())) {
-      return "";
-    }
-
-    const horas = dateObject.getHours();
-    const minutos = dateObject.getMinutes();
-    const horarioFormatado = `${horas.toString().padStart(2, "0")}:${minutos
-      .toString()
-      .padStart(2, "0")}`;
-    return horarioFormatado;
-  }
-
   return (
     <ProtectedRoute>
       <div>
-        <h1>Teste</h1>
+        <div>
         {user && (
           <div>
-            <p>Nome do Usuário: {user.name}</p>
-            <p>Email do Usuário: {user.email}</p>
+            <Link href="/profile">
+            {user.avatarUrl && (
+              <Image
+                src={user.avatarUrl}
+                alt="avatar"
+                width={100}
+                height={100}
+                className="mx-auto"
+              />
+            )}
+            <p>{user.name}</p>
+            </Link>
           </div>
         )}
+
+        </div>
         <div>
           {chat.map((msg) => (
             <div key={msg.id}>

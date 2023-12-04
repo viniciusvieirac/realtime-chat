@@ -24,8 +24,17 @@ export class MessagesService {
     return message;
   }
 
-  async findAllMessages() {
-    const allMessagess = await this.prisma.message.findMany();
-    return allMessagess;
+  async findAllMessagesWithUsers() {
+    const allMessagesWithUsers = await this.prisma.message.findMany({
+      include: {
+        sender: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return allMessagesWithUsers;
   }
 }

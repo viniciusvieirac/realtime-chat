@@ -21,13 +21,13 @@ export class MessagesGateway {
   @SubscribeMessage('createMessage')
   create(@MessageBody() createMessageDto: CreateMessageDto) {
     const message = this.messagesService.create(createMessageDto);
-    this.server.emit('newMessage', message);
+    this.server.emit('message', message);
     return message;
   }
 
   @SubscribeMessage('findAllMessages')
-  findAll() {
-    const messages = this.messagesService.findAllMessages();
-    return messages;
+  async handleFindAllMessages() {
+    const messages = await this.messagesService.findAllMessagesWithUsers();
+    this.server.emit('allMessages', messages);
   }
 }

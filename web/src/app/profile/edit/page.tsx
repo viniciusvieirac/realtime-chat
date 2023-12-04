@@ -23,7 +23,9 @@ export default function EditProfile() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if(token){
-      const updatedProfile = await updateUser(token, { description, image: selectedImage });
+      console.log(selectedImage);
+      const updatedProfile = await updateUser(token, { description, image: selectedImage?.toString() });
+      console.log(updatedProfile);
     }
   };
 

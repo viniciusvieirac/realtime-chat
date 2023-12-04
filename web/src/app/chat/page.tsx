@@ -1,21 +1,19 @@
 "use client";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { useContext, useEffect, useState } from "react";
-import { getUserByToken } from "../utils/AxiosFunctions";
-import { Button, TextField } from "@mui/material";
-import io from "socket.io-client";
-import { UserData } from "@/interfaces/userInterface";
+import AuthContext from "@/context/auth/AuthContext";
 import { IMsgData, IMsgDataTypes } from "@/interfaces/MessagesInterface";
-import { formatarHorarioISO8601 } from "../utils/formattedHours";
+import { Button, TextField } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import AuthContext from "@/context/auth/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import io from "socket.io-client";
+import { formatarHorarioISO8601 } from "../utils/formattedHours";
 
 const socket = io("http://localhost:3000");
 
 export default function Chat() {
-  const {user, setUser} = useContext(AuthContext);
+  const {user, getUser} = useContext(AuthContext);
   const [chat, setChat] = useState<IMsgData[]>([]);
   const [text, setText] = useState("");
   const [newMessage, setNewMessage] = useState<IMsgData | null>(null);
@@ -69,13 +67,6 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const getUser = async () => {
-      if (token) {
-        const data = await getUserByToken("/user/data", token);
-        setUser(data as UserData);
-      }
-    };
     getUser();
   }, []);
 

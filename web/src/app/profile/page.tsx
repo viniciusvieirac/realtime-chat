@@ -1,34 +1,42 @@
 'use client';
+
+import AuthContext from '@/context/auth/AuthContext';
 import { Button } from '@mui/material';
-import { useRouter } from "next/navigation";
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useContext, useEffect } from 'react';
 
 export default function Profile() {
   const router = useRouter();
-  const [name, setName] = useState('John Doe');
-  const [description, setDescription] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-  const [image, setImage] = useState('/placeholder-image.jpg'); // Defina a URL da imagem do perfil aqui
-  const [previewImage, setPreviewImage] = useState(null);
+  const { user, getUser } = useContext(AuthContext);
 
   const handleEditProfile = () => {
     router.push('/profile/edit');
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await getUser();
+    };
+    fetchData();
+  }, [getUser]);
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md bg-white text-slate-900 rounded-lg shadow-lg p-6">
         <div className="mb-4 text-center">
-          <Image
-            src={image}
-            alt="Imagem do perfil"
-            width={128}
-            height={128}
-            className="rounded-full mx-auto mb-2"
-          />
+          {user.imageUrl && (
+            <Image
+              src={user.imageUrl}
+              alt="Imagem do perfil"
+              width={128}
+              height={128}
+              className="rounded-full mx-auto mb-2"
+            />
+          )}
         </div>
-        <h1 className="text-2xl font-bold mb-4">{name}</h1>
-        <p className="text-sm mb-4">{description}</p>
+        <h1 className="text-2xl font-bold mb-4">{user.name}</h1>
+        <p className="text-sm mb-4">{user.description}</p>
         <Button
           variant="contained"
           color="primary"

@@ -2,6 +2,7 @@
 
 import { useState, ReactNode, useMemo } from "react";
 import AuthContext from "./AuthContext";
+import { getUserByToken } from "@/app/utils/AxiosFunctions";
 
 interface AuthContextValues {
   email: string;
@@ -16,14 +17,25 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState({} as AuthContextValues);
 
   const values: AuthContextValues = useMemo(
-    () => ({
-      email,
-      setEmail,
-      password,
-      setPassword,
-      user,
-      setUser,
-    }),
+    () => {
+      const getUser = async () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const data = await getUserByToken("/user/data", token);
+          setUser(data);
+        }
+      };
+
+      return {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        user,
+        setUser,
+        getUser,
+      };
+    },
     [email, setEmail, password, setPassword, user, setUser]
   );
 

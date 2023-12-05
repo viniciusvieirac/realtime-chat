@@ -6,6 +6,7 @@ export interface IMsgDataTypes {
 }
 export interface Sender {
   name: string;
+  imageUrl: string;
 }
 export interface IMsgData {
   content: string;
@@ -13,4 +14,5 @@ export interface IMsgData {
   imageUrl?: string;
   id?: number;
   sender: Sender;
+  senderId: number;
 }

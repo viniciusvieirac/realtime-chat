@@ -28,17 +28,17 @@ export default function Home() {
     }
   };
 
+  const platinumColor = 'rgb(var(--platinum))';
+
+  const divStyle = {
+    backgroundColor: platinumColor,
+  }
+
   return (
     <main className="flex flex-col lg:flex-row items-center justify-center h-screen">
-      <div className="lg:w-1/2 mb-8 lg:mb-0">
-        <Image
-          src="/images/undraw_messages.svg"
-          alt="Picture of the author"
-          width={600}
-          height={600}
-        />
-      </div>
-      <div className="lg:w-2/5 rounded-lg bg-white bg-opacity-75 backdrop-blur-md p-8 flex flex-col items-center justify-center h-5/6">
+      <div 
+      className="lg:w-2/5 rounded-lg bg-white bg-opacity-75 backdrop-blur-md p-8 flex flex-col items-center justify-center h-5/6"
+      style={divStyle}>
         <div className="w-full h-full text-center flex flex-col items-center justify-start">
           <div className="mt-20">
             <Image

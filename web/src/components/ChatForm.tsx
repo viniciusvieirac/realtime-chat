@@ -20,7 +20,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ onSubmit, text, setText }) => {
           label="Envie sua mensagem"
           variant="filled"
         />
-        <Button variant="contained" endIcon={<SendIcon />} type="submit">Enviar</Button>
+        <Button variant="contained" style={{ backgroundColor: 'blue', color: 'white' }} endIcon={<SendIcon />} type="submit">Enviar</Button>
       </form>
     </div>
   );

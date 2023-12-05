@@ -99,7 +99,7 @@ export default function Chat() {
         <ChatForm onSubmit={sendData} text={text} setText={setText} />
         <div className="absolute top-4 right-4 flex items-center space-x-2">
           <div>
-            <Button variant="contained" onClick={handleLogout}>Logout</Button>
+            <Button variant="contained" style={{ backgroundColor: 'blue', color: 'white' }} onClick={handleLogout}>Logout</Button>
           </div>
             <Image
               src={user?.imageUrl || "/images/avatar.png"}

@@ -17,7 +17,6 @@ export default function EditProfile() {
     if (event.target.files && event.target.files[0]) {
       const imageFile = event.target.files[0];
       const imageUrl = URL.createObjectURL(imageFile);
-      console.log(imageUrl);
       setSelectedImage(imageUrl);
     }
   };

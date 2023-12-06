@@ -9,12 +9,11 @@ interface ChatMessageProps {
 
 const ChatMessages: React.FC<ChatMessageProps> = ({ message, userId }) => {
   const isUserMessage = message.senderId === Number(userId);
-  const messageContainerClasses = `p-3 rounded-lg text-black text-sm ${isUserMessage ? "bg-blue-500 text-white ml-auto" : "bg-gray-300"}`;
 
   return (
     <div className={`flex items-start mb-3 ${isUserMessage ? "justify-end" : ""}`}>
-      <div>
-        {!isUserMessage && (
+      {!isUserMessage && (
+        <div>
           <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
             <Image
               src={message.sender?.imageUrl || "/images/avatar.png"}
@@ -23,10 +22,14 @@ const ChatMessages: React.FC<ChatMessageProps> = ({ message, userId }) => {
               height={32}
             />
           </div>
-        )}
-      </div>
-      <div className={`${messageContainerClasses} ${isUserMessage ? "ml-auto" : ""}`}>
-        <h4 className="m-0 text-lg font-bold">{message.sender?.name}</h4>
+        </div>
+      )}
+      <div className={`p-3 rounded-lg text-black text-sm ${isUserMessage ? "bg-blue-500 text-white ml-auto" : "bg-gray-300"}`}>
+        {!isUserMessage ? (
+          <h4 className="m-0 text-lg font-bold">{message.sender?.name}</h4>
+        ):
+        <h4 className="m-0 text-lg font-bold">Você</h4>
+        }
         <p className={`m-0 ${isUserMessage ? "text-white" : "text-black"}`}>{message.content}</p>
         <div className="text-xs text-gray-600">
           <span>{formatarHorarioISO8601(message.createdAt)}</span>

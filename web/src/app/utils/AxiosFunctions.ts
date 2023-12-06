@@ -1,9 +1,8 @@
 import { UpdateUser } from '@/interfaces/userInterface';
 import axios from 'axios';
-import { get } from 'http';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://desafio-play-for-a-cause-production.up.railway.app/'
 });
 
 export const setToken = (token: string) => {

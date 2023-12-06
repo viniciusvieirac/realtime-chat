@@ -69,15 +69,27 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: CreateUserDto) {
-    const user = await this.prisma.user.update({
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    if (!updateUserDto.imageUrl) {
+      updateUserDto.imageUrl = user.imageUrl;
+    }
+
+    if (!updateUserDto.description) {
+      updateUserDto.description = user.description;
+    }
+
+    const updatedUser = await this.prisma.user.update({
       where: { id: id },
       data: {
         ...updateUserDto,
-        password: bcrypt.hashSync(updateUserDto.password, 10),
       },
     });
+
     return {
-      ...user,
+      ...updatedUser,
       password: undefined,
     };
   }

@@ -1,0 +1,40 @@
+# version: '3.9'
+# services:
+#   frontend:
+#     container_name: app_frontend
+#     build: ./web
+#     ports:
+#       - 3001:3001
+#     working_dir: /app_frontend
+
+#   backend:
+#     container_name: app_backend
+#     build: ./server
+#     ports:
+#       - 3000:3000
+#     working_dir: /app_backend
+#     command: npm run dev  # Corrija este comando de acordo com a configuração do seu projeto
+#     volumes:
+#       - ./server/src:/app_backend/src
+#     depends_on:
+#       - db
+#     environment:
+#       - APP_PORT=3000
+#       - JWT_SECRET=jwt_secret
+#       - DB_USER=postgres
+#       - DB_PASS=mypassword
+#       - DB_HOST=db  # Alterado para corresponder ao nome do serviço de banco de dados
+#       - DB_PORT=5432
+
+#   db:
+#     image: postgres
+#     container_name: postgres
+#     ports:
+#       - 6500:5432
+#     environment:
+#       - POSTGRES_PASSWORD=mypassword
+#     restart: 'always'
+#     healthcheck:
+#       test: ["CMD", "pg_isready", "-U", "postgres"]  # Healthcheck correto para o PostgreSQL
+#       timeout: 10s
+#       retries: 5

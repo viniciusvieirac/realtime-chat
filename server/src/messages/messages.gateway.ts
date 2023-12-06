@@ -1,12 +1,12 @@
 import {
-  WebSocketGateway,
-  SubscribeMessage,
   MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { MessagesService } from './messages.service';
 import { Server } from 'socket.io';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { MessagesService } from './messages.service';
 
 @WebSocketGateway({
   cors: {
@@ -19,8 +19,8 @@ export class MessagesGateway {
   constructor(private readonly messagesService: MessagesService) {}
 
   @SubscribeMessage('createMessage')
-  create(@MessageBody() createMessageDto: CreateMessageDto) {
-    const message = this.messagesService.create(createMessageDto);
+  async create(@MessageBody() createMessageDto: CreateMessageDto) {
+    const message = await this.messagesService.create(createMessageDto);
     this.server.emit('message', message);
     return message;
   }

@@ -48,8 +48,8 @@ export default function Home() {
               height={100}
               className="mx-auto"
             />
-            <h1 className="text-3xl font-bold mt-14">Welcome Back!</h1>
-            <p className="text-gray-600 mt-4">Sign in to continue</p>
+            <h1 className="text-3xl font-bold mt-14">Seja bem vindo!</h1>
+            <p className="text-gray-600 mt-4">Faça login para continuar</p>
           </div>
           <div>
             <form

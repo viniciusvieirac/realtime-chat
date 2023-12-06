@@ -1,19 +1,17 @@
 "use client";
 
+import ChatForm from "@/components/ChatForm";
+import ChatMessages from "@/components/ChatMessages";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AuthContext from "@/context/auth/AuthContext";
 import { IMsgData, IMsgDataTypes } from "@/interfaces/MessagesInterface";
-import { Button, TextField  } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import { Button } from "@mui/material";
 import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
-import { formatarHorarioISO8601 } from "../utils/formattedHours";
 import { useRouter } from "next/navigation";
-import ChatMessages from "@/components/ChatMessages";
-import ChatForm from "@/components/ChatForm";
+import { useContext, useEffect, useState } from "react";
+import io from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://desafio-play-for-a-cause-production.up.railway.app/");
 
 export default function Chat() {
   const { user, getUser } = useContext(AuthContext);

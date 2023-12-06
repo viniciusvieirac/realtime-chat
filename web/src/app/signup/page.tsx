@@ -1,37 +1,40 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { requestRegister } from '../utils/AxiosFunctions';
-import { signUpSchema } from '../utils/signupSchema';
-import { FormErrors } from '@/interfaces/FormInterfaces';
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { requestRegister } from "../utils/AxiosFunctions";
+import { signUpSchema } from "../utils/signupSchema";
+import { FormErrors } from "@/interfaces/FormInterfaces";
 
 export default function SignUp() {
   const route = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'name' | 'email' | 'password' | 'confirmPassword') => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "name" | "email" | "password" | "confirmPassword"
+  ) => {
     const value = e.target.value;
     switch (field) {
-      case 'name':
+      case "name":
         setName(value);
         break;
-      case 'email':
+      case "email":
         setEmail(value);
         break;
-      case 'password':
+      case "password":
         setPassword(value);
         break;
-      case 'confirmPassword':
+      case "confirmPassword":
         setConfirmPassword(value);
         break;
       default:
@@ -44,13 +47,13 @@ export default function SignUp() {
     clearErrors();
 
     if (!validateRequiredFields()) {
-      return alert('Por favor, preencha todos os campos obrigatórios');
+      return alert("Por favor, preencha todos os campos obrigatórios");
     }
 
     if (password !== confirmPassword) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        confirmPassword: 'As senhas não coincidem',
+        confirmPassword: "As senhas não coincidem",
       }));
       return;
     }
@@ -58,14 +61,16 @@ export default function SignUp() {
     const formData = { name, email, password };
     try {
       const validatedData = signUpSchema.parse(formData);
-      console.log('Dados validados:', validatedData);
+      console.log("Dados validados:", validatedData);
 
-      const data = await requestRegister('/signup', formData);
+      const data = await requestRegister("/signup", formData);
 
       if (data) {
-        setPassword('');
-        alert('Cadastro realizado com sucesso. Entre com suas credenciais para fazer login');
-        route.push('/');
+        setPassword("");
+        alert(
+          "Cadastro realizado com sucesso. Entre com suas credenciais para fazer login"
+        );
+        route.push("/");
       }
     } catch (error) {
       handleValidationError(error);
@@ -73,45 +78,50 @@ export default function SignUp() {
   };
 
   const validateRequiredFields = () => {
-    return name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+    return name.trim() !== "" && email.trim() !== "" && password.trim() !== "";
   };
 
   const handleValidationError = (error: any) => {
-    console.log('Ocorreu um erro:', error);
+    console.log("Ocorreu um erro:", error);
     if (error instanceof z.ZodError) {
       const validationErrors: FormErrors = {
-        name: '',
-        email: '',
-        password: '',
+        name: "",
+        email: "",
+        password: "",
       };
-  
+
       error.errors.forEach((err) => {
         const field = err.path[0];
         if (field in validationErrors) {
           validationErrors[field as keyof FormErrors] = err.message as string;
         }
       });
-  
+
       setErrors(validationErrors);
     } else {
       alert(error.message);
     }
   };
-  
 
   const clearErrors = () => {
     setErrors({
-      name: '',
-      email: '',
-      password: '',
+      name: "",
+      email: "",
+      password: "",
     });
   };
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3" onSubmit={handleSubmit}>
+      <form
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3"
+        onSubmit={handleSubmit}
+      >
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="name"
+          >
             Nome de usuário
           </label>
           <input
@@ -120,13 +130,16 @@ export default function SignUp() {
             type="username"
             placeholder="Nome de usuário"
             value={name}
-            onChange={(e) => handleInputChange(e, 'name')}
+            onChange={(e) => handleInputChange(e, "name")}
           />
           <p className="text-red-500 text-xs italic">{errors.name}</p>
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -135,13 +148,16 @@ export default function SignUp() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => handleInputChange(e, 'email')}
+            onChange={(e) => handleInputChange(e, "email")}
           />
           <p className="text-red-500 text-xs italic">{errors.email}</p>
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Senha
           </label>
           <input
@@ -150,13 +166,16 @@ export default function SignUp() {
             type="password"
             placeholder="Senha"
             value={password}
-            onChange={(e) => handleInputChange(e, 'password')}
+            onChange={(e) => handleInputChange(e, "password")}
           />
           <p className="text-red-500 text-xs italic">{errors.password}</p>
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="confirmPassword"
+          >
             Confirmar Senha
           </label>
           <input
@@ -165,7 +184,7 @@ export default function SignUp() {
             type="password"
             placeholder="Confirmar Senha"
             value={confirmPassword}
-            onChange={(e) => handleInputChange(e, 'confirmPassword')}
+            onChange={(e) => handleInputChange(e, "confirmPassword")}
           />
         </div>
 

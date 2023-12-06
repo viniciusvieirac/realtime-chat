@@ -48,6 +48,16 @@ Este projeto implementa uma aplicação de chat projetada para facilitar a comun
 - **Fase 3**:
   - Aprimoramentos na interface e experiência do usuário.
   - Implementação de recursos adicionais, como reações a mensagens, notificações ou indicadores de presença do usuário.
+ 
+## Deploy da Aplicação
+
+### Backend (Railway)
+- **Link**: [Railway - Desafio Play for a Cause Backend](https://desafio-play-for-a-cause-production.up.railway.app/)
+- **Descrição**: O backend da aplicação, desenvolvido usando Node.js com TypeScript e NestJS, está hospedado no Railway. A aplicação está configurada para lidar com a autenticação de usuários, armazenamento de mensagens e interações com o banco de dados PostgreSQL. Para acessar os recursos, é necessário autenticar-se com um token válido.
+
+### Frontend (Vercel)
+- **Link**: [Vercel - Desafio Play for a Cause Frontend](https://desafio-play-for-a-cause-livid.vercel.app/)
+- **Descrição**: O frontend da aplicação, desenvolvido utilizando Next.js, está hospedado na plataforma Vercel. Oferece uma interface intuitiva e responsiva para os usuários interagirem com a aplicação. Ele se comunica com o backend para fornecer funcionalidades como autenticação de usuários, envio e recebimento de mensagens em tempo real.
 
 ### Melhorias e Recursos Futuros
 - Implementar criptografia de ponta a ponta para mensagens seguras.

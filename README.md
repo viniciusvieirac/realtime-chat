@@ -22,12 +22,12 @@ Este projeto implementa uma aplicação de chat projetada para facilitar a comun
 ### Frontend
 - `Framework`: Next.js para desenvolvimento frontend fluido
 - `Design Libraries`:
-  - Chakra UI, Mantine Dev ou TailwindCSS para componentes de interface
+  - MaterialUI e TailwindCSS para componentes de interface
 - `State Management`:
-  - React Context API e/ou React Hook Form para gerenciar o estado dos formulários
-  - Axios e React Query para requisições à API e obtenção de dados
+  - React Context API para gerenciar o estado dos formulários
+  - Axios para requisições à API e obtenção de dados
 - `Data Validation`:
-  - Zod ou bibliotecas equivalentes para validação de objetos
+  - Zod para validação de objetos
 
 ## Implementation Highlights
 - **Novos Conhecimentos Adquiridos**:

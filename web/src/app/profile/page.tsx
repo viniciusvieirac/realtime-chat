@@ -1,18 +1,14 @@
-'use client';
+"use client";
 
-import AuthContext from '@/context/auth/AuthContext';
-import { Button } from '@mui/material';
-import Image from 'next/image';
+import AuthContext from "@/context/auth/AuthContext";
+import { Button } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect } from "react";
 
 export default function Profile() {
   const router = useRouter();
   const { user, getUser } = useContext(AuthContext);
-
-  const handleEditProfile = () => {
-    router.push('/profile/edit');
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,10 +21,12 @@ export default function Profile() {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md bg-white text-slate-900 rounded-lg shadow-lg p-6">
         <Button
-         variant="contained"
-         color="primary"
-         className="w-full mb-4 bg-black">
-          <a href="/chat">Voltar</a>
+          variant="contained"
+          color="primary"
+          onClick={() => router.push("/chat")}
+          className="w-full mb-4 bg-black"
+        >
+          Voltar
         </Button>
         <div className="mb-4 text-center">
           {user.imageUrl && (
@@ -47,7 +45,7 @@ export default function Profile() {
           variant="contained"
           color="primary"
           className="w-full mb-4 bg-black"
-          onClick={handleEditProfile}
+          onClick={() => router.push("/profile/edit")}
         >
           Editar Perfil
         </Button>

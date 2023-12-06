@@ -65,7 +65,7 @@ export default function Chat() {
           name: user?.name || "Anonymous",
           imageUrl: user?.imageUrl || "",
         },
-        senderId: userId, // Usar userId aqui
+        senderId: userId,
       };
   
       setText("");

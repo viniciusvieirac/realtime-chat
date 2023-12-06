@@ -1,5 +1,3 @@
-// ChatMessage.tsx
-
 import Image from "next/image";
 import { IMsgData } from "@/interfaces/MessagesInterface";
 import { formatarHorarioISO8601 } from "../app/utils/formattedHours";
